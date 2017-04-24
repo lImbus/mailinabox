@@ -34,13 +34,12 @@ apt-get purge -qq -y roundcube* #NODOC
 # Install Roundcube from source if it is not already present or if it is out of date.
 # Combine the Roundcube version number with the commit hash of vacation_sieve to track
 # whether we have the latest version.
-VERSION=1.2.3
-HASH=b0c3c4ba25596b2637c058b8254b58292755ec52
+VERSION=1.2.4
+HASH=e2091ea775b80eda43ab225130d5a2e888c3789a
 VACATION_SIEVE_VERSION=91ea6f52216390073d1f5b70b5f6bea0bfaee7e5
-PERSISTENT_LOGIN_VERSION=1e9d724476a370ce917a2fcd5b3217b0c306c24e
+PERSISTENT_LOGIN_VERSION=c4516c4be37d12ef653de86497304e073a863c2a
 HTML5_NOTIFIER_VERSION=4b370e3cd60dabd2f428a26f45b677ad1b7118d5
 CARDDAV_VERSION=2.0.4
-# sha1sum of the rcmcarddav plugin release
 CARDDAV_HASH=d93f3cfb3038a519e71c7c3212c1d16f5da609a4
 
 UPDATE_KEY=$VERSION:$VACATION_SIEVE_VERSION:$PERSISTENT_LOGIN_VERSION:$HTML5_NOTIFIER_VERSION:$CARDDAV_VERSION:a
@@ -122,7 +121,7 @@ cat > $RCM_CONFIG <<EOF;
 \$config['product_name'] = '$PRIMARY_HOSTNAME Webmail';
 \$config['des_key'] = '$SECRET_KEY';
 \$config['plugins'] = array('html5_notifier', 'archive', 'zipdownload', 'password', 'managesieve', 'jqueryui', 'vacation_sieve', 'persistent_login', 'carddav');
-\$config['skin'] = 'classic';
+\$config['skin'] = 'larry';
 \$config['login_autocomplete'] = 2;
 \$config['password_charset'] = 'UTF-8';
 \$config['junk_mbox'] = 'Spam';
@@ -133,14 +132,12 @@ EOF
 cat > ${RCM_PLUGIN_DIR}/carddav/config.inc.php <<EOF;
 <?php
 /* Do not edit. Written by Mail-in-a-Box. Regenerated on updates. */
+\$prefs['_GLOBAL']['hide_preferences'] = true;
+\$prefs['_GLOBAL']['suppress_version_warning'] = true;
 \$prefs['ownCloud'] = array(
-	 // required attributes
 	 'name'         =>  'ownCloud',
-	 // will be substituted for the roundcube username
-	 'username'     =>  '%u',
-	 // will be substituted for the roundcube password
-	 'password'     =>  '%p',
-	 // %u will be substituted for the CardDAV username
+	 'username'     =>  '%u', // login username
+	 'password'     =>  '%p', // login password
 	 'url'          =>  'https://${PRIMARY_HOSTNAME}/cloud/remote.php/carddav/addressbooks/%u/contacts',
 	 'active'       =>  true,
 	 'readonly'     =>  false,
